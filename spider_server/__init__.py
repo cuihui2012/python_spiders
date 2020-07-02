@@ -9,3 +9,4 @@ app = Flask(__name__)
 
 # 需要导入路由模块,否则路由不生效
 from spider_server.mafengwo_spider import mafengwo_view
+from spider_server.anjuke_spider import anjuke_view
