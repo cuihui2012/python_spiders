@@ -21,3 +21,15 @@ def get_datas_details(name):
     datas = anjuke_server.AnJuKeServer().get_datas_details(name)
     # 返回json格式的数据
     return Response(json.dumps(datas))
+
+
+# 获取最新数据
+@app.route('/get_new_data')
+def get_new_data():
+    try:
+        anjuke_server.AnJuKeServer().run()
+    except Exception as result:
+        # 发生错误时回滚
+        print("发生错误 %s" % result)
+        return "0"
+    return "1"
