@@ -2,6 +2,9 @@
 
 import pymysql
 from spider_server.db import db_mysql
+from spider_server.logs.logger import Logger
+
+logger = Logger(__name__).get_log()
 
 
 class MaFengWoDB(db_mysql.DBMysql):
@@ -39,8 +42,8 @@ class MaFengWoDB(db_mysql.DBMysql):
                     db.execute(sql)
                 except Exception as result:
                     # 发生错误时回滚
-                    print("发生错误 %s" % result)
-                    print(sql)
+                    logger.error("发生错误 %s" % result)
+                    logger.error(sql)
                     # 数据库自动提交需要设置为off
                     # SHOW VARIABLES LIKE 'autocommit';
                     # SET autocommit = 0;
@@ -98,5 +101,5 @@ class MaFengWoDB(db_mysql.DBMysql):
             db.execute(sql)
             # 获取所有记录列表
             results = db.fetchall()
-            print(results)
+            logger.info(results)
             return results

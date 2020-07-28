@@ -2,3 +2,5 @@ flask
 pymysql
 requests
 lxml
+selenium
+configparser

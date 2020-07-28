@@ -6,6 +6,9 @@ import requests
 from lxml import etree
 # 正则
 import re
+
+from spider_server.conf.config_util import ConfigUtil
+from spider_server.logs.logger import Logger
 from spider_server.mafengwo_spider import mafengwo_db
 
 """
@@ -15,13 +18,15 @@ from spider_server.mafengwo_spider import mafengwo_db
 4 保存数据
 """
 
+logger = Logger(__name__).get_log()
+
 
 class MaFengWoServer(object):
     def __init__(self, city):
         """初始化数据"""
         self.city = city
         # 准备url模板
-        self.url_pattern = "http://www.mafengwo.cn/search/q.php?q=" + city + "&p={}&t=pois&kt=1"
+        self.url_pattern = ConfigUtil().get("URL", "URL_MFW")
         # 指定请求头
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
@@ -46,9 +51,9 @@ class MaFengWoServer(object):
         """获取url列表(前20个页面的url)"""
         url_list = []
         for i in range(1, 21):
-            url = self.url_pattern.format(i)
+            url = self.url_pattern.format(self.city, i)
             url_list.append(url)
-        print(url_list)
+        logger.info(url_list)
         return url_list
 
     def get_page_from_url(self, url):
@@ -76,7 +81,8 @@ class MaFengWoServer(object):
             # 去掉标题中的景点,数据库中插入'进行转义
             item["name"] = name.replace("景点 - ", "").replace("'", "\\'")
             # 提取地址
-            item["address"] = li.xpath("./div/div[2]/ul/li[1]/a//text()")[0]
+            item["address"] = li.xpath("./div/div[2]/ul/li[1]/a//text()")[0] if len(
+                li.xpath("./div/div[2]/ul/li[1]/a//text()")) > 0 else ""
             # 点评数量
             comments_num = li.xpath("./div/div[2]/ul/li[2]/a//text()")[0]
             # 正则提取数字,蜂评(23)--蜂评\((\d+)\)
@@ -107,7 +113,4 @@ class MaFengWoServer(object):
 
 
 if __name__ == '__main__':
-    for i in range(2):
-        ms = MaFengWoServer("西安")
-        ms.run()
-    # ms.get_data()
+    pass

@@ -2,6 +2,9 @@
 
 import pymysql
 from spider_server.db import db_mysql
+from spider_server.logs.logger import Logger
+
+logger = Logger(__name__).get_log()
 
 
 class AnJuKeDB(db_mysql.DBMysql):
@@ -41,8 +44,8 @@ class AnJuKeDB(db_mysql.DBMysql):
                     db.execute(sql)
                 except Exception as result:
                     # 发生错误时回滚
-                    print("发生错误 %s" % result)
-                    print(sql)
+                    logger.error("发生错误 %s" % result)
+                    logger.error(sql)
                     # 数据库自动提交需要设置为off
                     # SHOW VARIABLES LIKE 'autocommit';
                     # SET autocommit = 0;
@@ -58,7 +61,7 @@ class AnJuKeDB(db_mysql.DBMysql):
             list = []
             for result in results:
                 list.append(result["NAME"])
-            print(list)
+            logger.info(list)
             return list
 
     def get_datas_details(self, name):
@@ -76,11 +79,11 @@ class AnJuKeDB(db_mysql.DBMysql):
                     FROM
                       tb_anjuke_xian 
                     WHERE NAME = '{}' 
-                      ORDER BY create_time LIMIT 10
+                      ORDER BY create_time desc LIMIT 10
                   """.format(name)
             # 使用 execute()  方法执行 SQL 查询
             db.execute(sql)
             # 获取所有记录列表
             results = db.fetchall()
-            print(results)
+            logger.info(results)
             return results

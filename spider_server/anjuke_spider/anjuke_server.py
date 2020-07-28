@@ -7,6 +7,8 @@ from lxml import etree
 # 正则
 import re
 from spider_server.anjuke_spider import anjuke_db
+from spider_server.conf.config_util import ConfigUtil
+from spider_server.logs.logger import Logger
 
 """
 1 准备URL
@@ -14,13 +16,14 @@ from spider_server.anjuke_spider import anjuke_db
 3 解析数据
 4 保存数据
 """
+logger = Logger(__name__).get_log()
 
 
 class AnJuKeServer(object):
     def __init__(self):
         """初始化数据"""
         # 准备url
-        self.url = "https://xa.xinfang.anjuke.com/lou/chengnan/a1_w1/"
+        self.url = ConfigUtil().get("URL", "URL_AJK")
         # 指定请求头
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
@@ -32,7 +35,7 @@ class AnJuKeServer(object):
         page = self.get_page_from_url(self.url)
         # 解析数据
         datas = self.get_datas_from_page(page)
-        print(datas)
+        logger.info(datas)
         # 保存数据
         self.save_data(datas)
 

@@ -5,6 +5,9 @@ from flask import Response
 import json
 from spider_server import app  # 引入模块中的公共变量-flask对象
 from spider_server.anjuke_spider import anjuke_server
+from spider_server.logs.logger import Logger
+
+logger = Logger(__name__).get_log()
 
 
 # 获取下拉列表数据
@@ -30,6 +33,6 @@ def get_new_data():
         anjuke_server.AnJuKeServer().run()
     except Exception as result:
         # 发生错误时回滚
-        print("发生错误 %s" % result)
+        logger.error("发生错误 %s" % result)
         return "0"
     return "1"

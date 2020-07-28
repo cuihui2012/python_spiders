@@ -2,12 +2,14 @@
 
 import pymysql
 
-from spider_server.conf import config
+from spider_server.conf.config_util import ConfigUtil
 
 
 class DBMysql(object):
-    def __init__(self, host=config.DB_HOST, port=config.DB_PORT, db=config.DB, user=config.USER, passwd=config.PASSWD,
-                 charset=config.CHARSET):
+    def __init__(self, host=ConfigUtil().get("DB", "DB_HOST"), port=int(ConfigUtil().get("DB", "DB_PORT")),
+                 db=ConfigUtil().get("DB", "DB"), user=ConfigUtil().get("DB", "USER"),
+                 passwd=ConfigUtil().get("DB", "PASSWD"),
+                 charset=ConfigUtil().get("DB", "CHARSET")):
         # 建立连接
         self.conn = pymysql.connect(host=host, port=port, db=db, user=user, passwd=passwd, charset=charset)
         # 创建游标，操作设置为字典类型
