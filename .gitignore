@@ -17,7 +17,7 @@ HELP.md
 ### IntelliJ IDEA ###
 .idea
 /.idea/
-*/__pycache__
+**/__pycache__
 *.iws
 *.iml
 *.ipr
