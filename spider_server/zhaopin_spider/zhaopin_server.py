@@ -4,9 +4,6 @@
 import time
 import urllib.parse
 
-import requests
-# 需要安装,解析数据用
-import requests_html
 from lxml import etree
 
 from selenium import webdriver
@@ -47,7 +44,7 @@ class ZhaopinServer(object):
         for url in url_list:
             logger.info(url)
             # 防止封ip
-            time.sleep(30)
+            time.sleep(300)
             # 3 发送请求,获取响应数据
             page = self.get_page_from_url(url)
             # 4 解析数据
@@ -58,12 +55,12 @@ class ZhaopinServer(object):
     def get_url_list(self):
         """获取url列表(前20个页面的url)"""
         url_list = []
-        # for i in range(1, 20):
-        #     url = self.url_pattern.format(i)
-        #     url_list.append(url)
+        for i in range(1, 5):
+            url = self.url_pattern.format(i)
+            url_list.append(url)
         # 测试用
-        url = self.url_pattern.format(1)
-        url_list.append(url)
+        # url = self.url_pattern.format(1)
+        # url_list.append(url)
         return url_list
 
     def get_page_from_url(self, url):
