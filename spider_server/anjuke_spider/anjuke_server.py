@@ -41,7 +41,7 @@ class AnJuKeServer(object):
 
     def get_page_from_url(self, url):
         """根据url,发送请求,获取页面数据"""
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, verify=False)
         # 返回响应的字符串数据,二进制需要转为字符串
         return response.content.decode()
 
