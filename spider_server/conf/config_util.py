@@ -33,14 +33,11 @@ class ConfigUtil(object):
         logger.info("ConfigUtil-->对象属性初始化")
         cfgparser = configparser.ConfigParser()  # 系统配置
 
-        # 本文件测试需要追溯到../..路径
+        # 以当前文件为准找config.ini文件
         cfgpath = os.path.join(os.path.abspath(os.path.join(__file__, "../../..")), "config.ini")
         logger.info("config.ini------>%s" % cfgpath)
         # 读ini文件
         cfgparser.read(cfgpath, encoding="utf-8")  # python3
-
-        # 项目启动,下方代码即可,因config.ini和run.py在同一路径下
-        # cfgparser.read("config.ini", encoding="utf-8")  # python3
 
         self.conf = cfgparser
         ConfigUtil.init_flag = True

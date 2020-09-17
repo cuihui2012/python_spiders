@@ -10,7 +10,7 @@ class Logger:
         self.logger.setLevel(logging.DEBUG)
 
         # 创建一个handler，用于写入日志文件，日志文件在run.py的同级目录下
-        # logname = 'out.log'  # 指定输出的日志文件名
+        # 以当前文件为准确定out.log文件位置
         logname = os.path.join(os.path.abspath(os.path.join(__file__, "../../..")), "out.log")
         fh = logging.FileHandler(logname, encoding='utf-8')  # 指定utf-8格式编码，避免输出的日志文本乱码
         fh.setLevel(logging.DEBUG)
