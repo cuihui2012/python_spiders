@@ -1,5 +1,5 @@
 #!/bin/bash
-## 测试代码1111
+## 测试代码11112222
 ##部署项目
 cp -rf $PROJ_PATH/python_spiders/* /root/python_spiders/
 
