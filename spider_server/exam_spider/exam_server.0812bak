@@ -2,7 +2,7 @@
 
 # 需要安装,发送请求用
 import urllib.parse
-import json
+
 import requests
 # 需要安装,解析数据用
 from lxml import etree
@@ -44,26 +44,29 @@ class ExamServer(object):
         self.save_data(datas)
 
     def get_page_from_url(self, url):
-        """根据url,发送请求,获取接口数据"""
+        """根据url,发送请求,获取页面数据"""
         response = requests.get(url, headers=self.headers, verify=False)
         # 返回响应的字符串数据,二进制需要转为字符串
         return response.content.decode()
 
     def get_datas_from_page(self, page):
         """解析页面数据"""
-        # get接口数据转json对象--页面维护变更（之前是生成页面element，xpath解析页面）
-        jsonObj = json.loads(page)
-        lis = jsonObj["data"]["results"]
+        # 页面转换为Element,就可以使用Xpath提取数据了
+        element = etree.HTML(page)
+        # 获取标签列表
+        # xpath返回的是一个列表
+        lis = element.xpath("//*[@id='form1']/ul/li")
+        # 遍历列表,提取需要的数据
         data_list = []
         for li in lis:
             item = {}
             # ./ 表示当前路径之下,// 表示获取该节点及其之下所有的文本
             # 通知名称
-            item["notice_name"] = li["title"]
+            item["notice_name"] = li.xpath("./a/span//text()")[0].strip()
             # 通知时间
-            item["notice_time"] = li["publishedTimeStr"]
+            item["notice_time"] = li.xpath("./span[2]//text()")[0].strip()
             # 通知url
-            new_url = li["url"]
+            new_url = li.xpath("./a/@href")[0]
             item["notice_url"] = urllib.parse.urljoin(self.url, new_url)
             data_list.append(item)
         return data_list
